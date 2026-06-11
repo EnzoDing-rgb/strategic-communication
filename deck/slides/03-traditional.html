@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>03 · 传统做法</title>
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="stylesheet" href="../shared/handdrawn.css">
+</head>
+<body>
+<div class="page-num">04</div>
+<div class="slide-main">
+  <p class="kicker">Idea 1 回顾</p>
+  <h1 style="font-size:56px">传统多智能体仿真怎么做？</h1>
+  <div class="pipeline" style="margin:40px 0">
+    <div class="pipe-step">事件发生</div>
+    <span class="pipe-arrow">→</span>
+    <div class="pipe-step">Agent 观察</div>
+    <span class="pipe-arrow">→</span>
+    <div class="pipe-step">检索记忆</div>
+    <span class="pipe-arrow">→</span>
+    <div class="pipe-step">反思规划</div>
+    <span class="pipe-arrow">→</span>
+    <div class="pipe-step">生成行动</div>
+  </div>
+  <div class="cols-2" style="margin-top:28px; gap:64px">
+    <div class="sketch-box" style="padding:40px">
+      <h2>核心逻辑：反应式</h2>
+      <ul style="font-size:36px; line-height:2">
+        <li>遇到什么 → 回应什么</li>
+        <li>依赖过去经验，检索相似记忆</li>
+        <li>做「合理的」事，不比较方案</li>
+      </ul>
+    </div>
+    <div class="sketch-box" style="padding:40px; background:var(--peach)">
+      <h2>缺了什么？</h2>
+      <ul style="font-size:36px; line-height:2">
+        <li>不预测「如果选 A 而不是 B 会怎样」</li>
+        <li>不做反事实推理</li>
+        <li>没有策略优劣的比较机制</li>
+      </ul>
+    </div>
+  </div>
+  <p style="text-align:center; font-family:var(--font-hand); font-size:40px; color:var(--accent); margin-top:40px">反应式够处理日常沟通，够不着战略传播</p>
+</div>
+<script src="../shared/nav-keys.js"></script>
+</body>
+</html>

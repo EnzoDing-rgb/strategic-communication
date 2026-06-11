@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>05 · Nye 三层框架</title>
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="stylesheet" href="../shared/handdrawn.css">
+<style>
+  .nye-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-top: 32px;
+  }
+  .nye-card {
+    border: 2.5px solid var(--ink);
+    border-radius: 20px;
+    padding: 36px 28px;
+    box-shadow: 5px 5px 0 rgba(0,0,0,0.06);
+  }
+  .nye-card.layer1 { background: var(--blue); }
+  .nye-card.layer2 { background: var(--peach); }
+  .nye-card.layer3 { background: var(--lavender); }
+  .nye-card .layer-num {
+    font-family: var(--font-hand);
+    font-size: 28px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .nye-card h3 {
+    font-family: var(--font-hand);
+    font-size: 36px;
+    margin: 0 0 14px;
+  }
+  .nye-card .nye-example {
+    font-family: var(--font-body);
+    font-size: 22px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1.5px dashed var(--muted);
+    line-height: 1.5;
+  }
+  .nye-card .nye-need {
+    font-family: var(--font-hand);
+    font-size: 28px;
+    line-height: 1.6;
+  }
+  .nye-card .nye-fit {
+    font-family: var(--font-hand);
+    font-size: 26px;
+    margin-top: 14px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.7);
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="page-num">08</div>
+<div class="slide-main">
+  <p class="kicker">理论锚点：约瑟夫·奈的公共外交框架</p>
+  <h1 style="font-size:48px">三层公共外交 = 三种预测深度</h1>
+  <p style="text-align:center; font-family:var(--font-body); font-size:26px; color:var(--muted); margin-top:8px">
+    Nye 以「软实力」闻名。公共外交是软实力的操作层，三层框架是操作指南。我们盯第二、三层。
+  </p>
+
+  <div class="nye-grid">
+    <div class="nye-card layer1">
+      <div class="layer-num">Layer 1</div>
+      <h3>日常沟通</h3>
+      <div class="nye-example">外交部回应记者提问，对事件实时表态</div>
+      <div class="nye-need">
+        时间：小时 / 天<br>
+        做法：检索已有立场，生成前后一致的回应<br>
+        预测需求：<strong>几乎为零</strong>
+      </div>
+      <div class="nye-fit">→ LLM 够用</div>
+    </div>
+
+    <div class="nye-card layer2">
+      <div class="layer-num">Layer 2</div>
+      <h3>战略传播</h3>
+      <div class="nye-example">围绕一个核心叙事，持续影响他国精英</div>
+      <div class="nye-need">
+        时间：月 / 年<br>
+        做法：设计叙事 → 选择渠道 → 持续投放 → <strong>等半年民调才知道效果</strong><br>
+        预测需求：<strong>必须事前推演</strong>
+      </div>
+      <div class="nye-fit">→ 需要 World Model</div>
+    </div>
+
+    <div class="nye-card layer3">
+      <div class="layer-num">Layer 3</div>
+      <h3>关系建设</h3>
+      <div class="nye-example">学术交流、文化项目，培养长期友好网络</div>
+      <div class="nye-need">
+        时间：年 / 十年<br>
+        做法：A 影响 B，B 影响 C，反馈循环交织<br>
+        预测需求：<strong>效果几十年才显现，中间无数人互相影响</strong>
+      </div>
+      <div class="nye-fit">→ 需要 World Model</div>
+    </div>
+  </div>
+
+  <p style="text-align:center; font-family:var(--font-hand); font-size:38px; color:var(--accent); margin-top:36px">
+    Nye 的每一层，天然定义了一个<strong>预测问题</strong>——只是他没这么说
+  </p>
+  <p style="text-align:center; font-family:var(--font-hand); font-size:28px; color:var(--muted); margin-top:4px">
+    本文贡献：把 Nye 的经验框架翻译成计算语言 → 越往上层，越不可能靠「反应」，越需要「预测」
+  </p>
+</div>
+<script src="../shared/nav-keys.js"></script>
+</body>
+</html>

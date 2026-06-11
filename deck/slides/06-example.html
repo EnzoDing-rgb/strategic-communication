@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>06 · 举例</title>
+<link rel="stylesheet" href="../shared/fonts.css">
+<link rel="stylesheet" href="../shared/handdrawn.css">
+<style>
+  .scenario-bar {
+    font-family: var(--font-hand);
+    font-size: 30px;
+    padding: 18px 32px;
+    border: 2.5px solid var(--ink);
+    border-radius: 14px;
+    background: #fff;
+    text-align: center;
+    margin-bottom: 36px;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.05);
+  }
+  .vs-col {
+    padding: 34px 28px;
+    border: 2.5px solid var(--ink);
+    border-radius: 18px;
+    min-height: 300px;
+  }
+  .vs-col.llm { background: #fff; }
+  .vs-col.wm  { background: var(--green); }
+  .vs-col h3 { font-family: var(--font-hand); font-size: 36px; margin: 0 0 18px; }
+  .step-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-hand);
+    font-size: 30px;
+    margin-bottom: 12px;
+  }
+  .step-badge {
+    padding: 8px 16px;
+    border: 2px solid var(--ink);
+    border-radius: 10px;
+    font-size: 26px;
+    white-space: nowrap;
+  }
+  .step-badge.good { background: var(--green); }
+  .step-badge.bad  { background: var(--peach); }
+  .step-badge.neutral { background: #fff; }
+</style>
+</head>
+<body>
+<div class="page-num">07</div>
+<div class="slide-main">
+  <p class="kicker">为什么 LLM 不够？</p>
+  <h1 style="font-size:52px">举个例子：东海冲突中的舆论策略</h1>
+
+  <div class="scenario-bar" style="margin-top:24px">
+    当前状态：邻国精英对华态度 <strong>「警惕」</strong>　｜　我方有三种传播方案
+  </div>
+
+  <div class="cols-2" style="gap:48px; align-items:start">
+    <div class="vs-col llm">
+      <h3>❌ LLM 做法</h3>
+      <div style="font-family:var(--font-hand); font-size:30px; margin-bottom:14px; color:var(--muted)">「帮我写一段回应东海争议的外交文案」</div>
+      <div class="step-row"><span class="step-badge neutral">输出</span> 一段文字</div>
+      <p style="font-family:var(--font-hand); font-size:30px; margin-top:20px; color:var(--muted); line-height:1.5">文字读起来合理<br>但本质是<strong>文字接龙</strong><br>没有真的推演因果</p>
+    </div>
+
+    <div class="vs-col wm">
+      <h3>✅ World Model 做法</h3>
+      <div style="font-family:var(--font-hand); font-size:28px; line-height:2; margin-bottom:8px">
+        <div class="step-row"><span class="step-badge bad">方案A 强硬声明</span> → 警惕→敌意</div>
+        <div class="step-row"><span class="step-badge good">方案B 学术交流</span> → 警惕→中立</div>
+        <div class="step-row"><span class="step-badge bad">方案C 经济合作</span> → 警惕→警惕</div>
+      </div>
+      <p style="font-family:var(--font-hand); font-size:30px; margin-top:16px; color:var(--ink); line-height:1.5">分别预测三种后果<br>选效果最好的 → <strong>方案 B</strong></p>
+    </div>
+  </div>
+
+  <p style="text-align:center; font-family:var(--font-hand); font-size:40px; color:var(--accent); margin-top:32px">LLM 预测下一个 token，World Model 预测下一个状态</p>
+</div>
+<script src="../shared/nav-keys.js"></script>
+</body>
+</html>
