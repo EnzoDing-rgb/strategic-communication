@@ -4,7 +4,7 @@
 
 ## 论文
 
-**在线阅读：** https://enzoding-rgb.github.io/strategic-communication/
+**在线阅读：** https://enzoding-rgb.github.io/strategic-communication/deck/从反应到预测-大语言模型与战略传播.html
 
 > 直接点开即看，左侧目录导航，arXiv 风格排版。
 
