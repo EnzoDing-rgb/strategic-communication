@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>从反应到预测：大语言模型在战略传播中的决策逻辑反思与世界模型作为一种替代思考方式</title>
+<style>
+  :root {
+    --text: #222;
+    --muted: #555;
+    --light-muted: #888;
+    --accent: #0969da;
+    --bg: #ffffff;
+    --border: #d0d7de;
+    --code-bg: #f6f8fa;
+    --toc-w: 220px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: "STIX Two Text", "Latin Modern Roman", "Georgia", "Times New Roman", "Songti SC", "STSong", serif;
+    font-size: 17px;
+    line-height: 1.72;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { display: flex; }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--toc-w);
+    height: 100vh;
+    overflow-y: auto;
+    padding: 36px 20px 40px 28px;
+    background: #fafbfc;
+    border-right: 1px solid var(--border);
+    z-index: 10;
+  }
+
+  .toc-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--light-muted);
+    margin-bottom: 18px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+
+  .toc ul { list-style: none; padding: 0; margin: 0; }
+  .toc li { margin-bottom: 3px; line-height: 1.4; }
+
+  .toc a {
+    display: block;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.1s, color 0.1s;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+
+  .toc a:hover { background: #eef2f8; color: #222; }
+  .toc a.active { color: var(--accent); font-weight: 600; background: #eef5fd; }
+  .toc li.l3 a { font-size: 12px; padding-left: 20px; color: var(--light-muted); }
+
+  /* ── Main ── */
+  .main {
+    margin-left: var(--toc-w);
+    flex: 1;
+    min-width: 0;
+  }
+
+  .paper {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 52px 56px 80px;
+  }
+
+  /* ── Typography ── */
+  h1 {
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.45;
+    margin: 0 0 6px;
+    color: #111;
+    text-align: center;
+    scroll-margin-top: 32px;
+  }
+
+  h2 {
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 50px 0 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+    color: #111;
+    scroll-margin-top: 32px;
+  }
+
+  h3 {
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+    margin: 30px 0 10px;
+    color: #222;
+    scroll-margin-top: 32px;
+  }
+
+  p { margin: 0 0 14px; text-align: justify; }
+  strong { color: #111; font-weight: 600; }
+
+  /* ── Blockquote ── */
+  blockquote {
+    margin: 18px 0;
+    padding: 10px 18px;
+    border-left: 3px solid #d0d7de;
+    color: var(--muted);
+  }
+  blockquote p { margin: 6px 0; font-size: 16px; }
+
+  /* ── Tables ── */
+  figure.table {
+    margin: 22px 0;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14.5px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+
+  th {
+    font-weight: 600;
+    text-align: left;
+    padding: 9px 14px;
+    border-top: 2px solid #333;
+    border-bottom: 1.5px solid #333;
+    background: none;
+  }
+
+  td {
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── HR ── */
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 42px 0;
+  }
+
+  /* ── Code ── */
+  pre {
+    background: var(--code-bg);
+    padding: 14px 18px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 13.5px;
+    line-height: 1.55;
+    margin: 16px 0;
+    border: 1px solid var(--border);
+  }
+
+  code { font-family: 'SF Mono', 'Menlo', monospace; font-size: 13px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 1100px) {
+    :root { --toc-w: 200px; }
+    .sidebar { padding: 28px 14px 32px 20px; }
+    .paper { padding: 40px 36px 64px; }
+  }
+
+  @media (max-width: 860px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .paper { padding: 28px 24px 48px; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 18px; }
+    body { font-size: 16px; }
+  }
+
+  @media print {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    body { font-size: 11pt; }
+    .paper { max-width: 100%; padding: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <aside class="sidebar">
+    <nav class="toc"><div class="toc-title">Contents</div><ul><li><a href="#s2">摘要</a></li><li><a href="#s3">一、引言：战略传播与大语言模型——一个未经验证的假设</a></li><li class="l3"><a href="#s4">1.1 问题的提出</a></li><li class="l3"><a href="#s5">1.2 当前讨论的局限与已有学术资源</a></li><li class="l3"><a href="#s6">1.3 本文的论点与结构</a></li><li><a href="#s7">二、概念分析：反应式决策与预测式决策</a></li><li class="l3"><a href="#s8">2.1 反应式决策的逻辑</a></li><li class="l3"><a href="#s9">2.2 预测式决策的逻辑</a></li><li class="l3"><a href="#s10">2.3 两种决策逻辑的区分维度</a></li><li class="l3"><a href="#s11">2.4 这对区分在战略传播中的意义</a></li><li><a href="#s12">三、框架对比：大语言模型与战略传播的本质错位</a></li><li class="l3"><a href="#s13">3.1 大语言模型的决策逻辑</a></li><li class="l3"><a href="#s14">3.2 战略传播对决策逻辑的要求</a></li><li class="l3"><a href="#s15">3.3 世界模型——补上预测缺口</a></li><li class="l3"><a href="#s16">3.4 补充、限定与示意图</a></li><li><a href="#s17">四、案例演示：芯片禁令中的叙事策略选择</a></li><li class="l3"><a href="#s18">4.1 案例背景</a></li><li class="l3"><a href="#s19">4.2 中方的叙事选项</a></li><li class="l3"><a href="#s20">4.3 两种决策逻辑的比较：以中方叙事选择为例</a></li><li class="l3"><a href="#s21">4.4 本案例的论证意义</a></li><li><a href="#s22">五、结论</a></li><li class="l3"><a href="#s23">5.1 核心论点回顾</a></li><li class="l3"><a href="#s24">5.2 理论贡献与局限</a></li><li class="l3"><a href="#s25">5.3 实践含义</a></li><li class="l3"><a href="#s26">5.4 局限与开放问题</a></li><li><a href="#s27">参考文献</a></li><li><a href="#s28">附录：AI 使用声明</a></li></ul></nav>
+  </aside>
+  <main class="main">
+    <article class="paper">
+      <h1 id="s1">从反应到预测：大语言模型在战略传播中的决策逻辑反思与世界模型作为一种替代思考方式</h1>
+
+<blockquote>
+<p>初稿 · 课程论文 · 战略传播与国际新秩序</p>
+</blockquote>
+
+<hr>
+
+<h2 id="s2">摘要</h2>
+
+<p>当前，人工智能特别是大语言模型的迅速发展引发了其能否应用于战略传播——即国家间旨在塑造受众长期认知的传播活动——的广泛讨论。一种颇具影响的假设认为，大语言模型凭借其强大的文本生成能力可以成为战略传播的有效工具。本文对这一假设提出审慎质疑，指出当前讨论存在一个被忽视的结构性问题：大语言模型在底层计算逻辑上擅长的是反应式决策（检索已有知识→生成合理回应），而战略传播的决策环节——在多个候选策略之间做出有效选择——需要的是预测式决策逻辑（枚举候选策略→推演后果→比较→选择最优）。当前以&quot;内容生产&quot;为中心的大语言模型应用思路，可能错置了战略传播实践的重点：重点不是&quot;生成更华丽的文本&quot;，而是&quot;在开口之前推演不同策略的可能后果&quot;。引入 Fuerth 的前瞻性治理（Anticipatory Governance）框架和 LeCun 的世界模型（World Model）概念，本文提出一种替代性的思考方式：战略传播的改进方向应从内容生成端转向策略推演端。以美国对华芯片禁令（2022-2026）为案例，本文展示&quot;互相伤害&quot;叙事框架的选择如何体现预测式决策逻辑的价值。本文的贡献在于引入一对概念区分——反应式决策与预测式决策——来审视战略传播的认知基础，从而为理解大语言模型在战略传播中的恰当角色提供一个经过论证的分析框架。</p>
+
+<p><strong>关键词：</strong> 战略传播；大语言模型；世界模型；预测式决策；前瞻性治理；芯片禁令</p>
+
+<hr>
+
+<h2 id="s3">一、引言：战略传播与大语言模型——一个未经验证的假设</h2>
+
+<h3 id="s4">1.1 问题的提出</h3>
+
+<p>国际战略传播——国家或政治行为体通过叙事、信息和价值观传播来塑造他国公众与精英认知的长期活动——正处于一场技术变革的前夜。以 GPT 系列为代表的大语言模型的迅速发展让一个诱人的前景浮现：如果机器能以接近人类的语言能力理解和生成传播内容，它能否承担战略传播的任务？至少，它能否成为战略传播决策的辅助工具？</p>
+
+<p>支持这一前景的直觉是强大的：大语言模型能够消化海量信息、迅速生成自然语言文本、模拟不同角色的表达风格——这些能力似乎天然适配传播工作。然而，本文认为这一直觉建立在未经验证的前提之上。我们需要追问的不是&quot;大语言模型能否生成传播内容&quot;——这几乎已经不是一个问题。真正的追问是：<strong>大语言模型能否进行战略传播决策？</strong> 也就是：面对一个要长期改变目标受众认知的战略目标，大语言模型能否在不同传播策略之间做出有效选择？</p>
+
+<p>这个追问之所以必要，是因为它迫使我们审视战略传播的认知本质——不是&quot;说什么话&quot;，而是&quot;怎么决定说什么话&quot;。传播者的核心操作不是语言生成，而是在开口之前对多种可选叙事的效果进行推演和比较。<strong>战略传播的本质是策略选择，不是内容生产。</strong></p>
+
+<h3 id="s5">1.2 当前讨论的局限与已有学术资源</h3>
+
+<p>关于大语言模型与战略传播的现有讨论呈现出一个明显的偏倚：它压倒性地聚焦于&quot;用 AI 生成传播内容&quot;——用大语言模型写通稿、做舆情分析、生成多语种宣传素材。这种讨论将大语言模型理解为一种更强的&quot;笔&quot;，而战略传播的核心问题——&quot;在什么时间、通过什么渠道、对什么受众、用什么叙事框架&quot;——仍然被预设为人类的决策领域。换言之，当前讨论只触及了战略传播的&quot;传播&quot;维度（content delivery），而未触及它的&quot;战略&quot;维度（strategy selection）。</p>
+
+<p>这种偏倚有其实际原因。但深入一步就会发现，如果我们将战略传播定义为&quot;基于对受众认知变化趋势的预测来选择传播策略&quot;——这是本文即将展开的核心定义——那么内容生成只是链条末端的一环。链条的前端——效果预测、策略比较、方案选择——恰恰是当前以大语言模型为中心的应用思路所忽视的。</p>
+
+<p>需要指出的是，本文不是在真空中提出&quot;预测性&quot;概念。传播学和国际关系领域已有讨论&quot;前瞻&quot;的先例。在传播学传统中，议题管理（issues management）、环境扫描（environmental scanning）、危机预警（crisis pre-emption）等概念自 1990 年代起即在讨论组织如何提前识别和应对潜在传播风险——但这些讨论主要聚焦于组织传播和危机管理场景，尚未系统性地对接到国家间战略传播的决策逻辑层面。在国际关系领域，Hafner-Burton、Kahler 和 Montgomery（2009）将社会网络分析从社会学和计算机科学引入国际关系研究，论证了&quot;网络分析不是另一种描述国际关系的方式，而是能提出不同的问题&quot;——这是一次成功的跨学科概念引入。Woolley 和 Howard（2016）将&quot;计算宣传&quot;（computational propaganda）概念引入政治传播，用一个新词锚定了一个交叉领域。Miskimmon、O&#x27;Loughlin 和 Roselle（2013）的战略叙事理论讨论了叙事如何形成、投射与被接受，但未将叙事选择环节锚定到底层的决策认知机制上。在国内学界，陆佳怡（2024）提出的&quot;计算国际传播&quot;概念和周葆华、方扬（2025）对&quot;大模型时代计算国际传播&quot;的梳理代表了将计算方法引入国际传播研究的最新努力，但讨论的重心仍在方法层面。</p>
+
+<p>本文在上述文献脉络中所做的推进是：将&quot;预测&quot;问题从方法层面或组织管理层面提升到决策逻辑层面，并用一对来自认知架构讨论的概念——反应式决策 vs 预测式决策——来形式化这个区分。本文不声称这对概念区分是&quot;首次&quot;被提出，而是论证它们在战略传播语境中具有尚未被充分认识的分析价值。</p>
+
+<h3 id="s6">1.3 本文的论点与结构</h3>
+
+<p>本文提出一个概念区分作为论证的基础：<strong>反应式决策</strong>与<strong>预测式决策</strong>。反应式决策的逻辑是&quot;遇到情况→检索经验→做合理的事&quot;。预测式决策的逻辑是&quot;面对目标→枚举选项→推演各自后果→选择最优&quot;。本文将论证：大语言模型在底层计算逻辑上属于反应式决策，而战略传播所要求的认知操作属于预测式决策。二者的不匹配不是性能不足——不是模型不够大、数据不够多、提示词不够优化——而是结构性错位：大语言模型被设计来做的事，和战略传播需要做的事，属于两种不同的决策逻辑。</p>
+
+<p>在此基础上，本文引入两条理论资源来建构替代方案。一是 Fuerth 的前瞻性治理框架，该框架区分了&quot;愿景&quot;（Vision，固定的未来图景）与&quot;前瞻&quot;（Foresight，对多种可能性的持续推演），这与反应式/预测式这对区分高度平行。二是 LeCun 的世界模型概念——一种在潜在空间中预测&quot;当前状态→动作→下一状态&quot;的认知架构，恰好对应了&quot;枚举选项→推演后果→比较&quot;的决策逻辑。</p>
+
+<p>本文采用概念分析与框架对比相结合的方法，辅以案例演示。结构如下：第二章进行概念分析，区分反应式与预测式两种决策逻辑。第三章进行框架对比，将大语言模型与世界模型分别对接到两种决策逻辑上。第四章以美国对华芯片禁令为案例，展示上述概念区分在真实战略传播场景中的解释力。第五章总结贡献与局限。</p>
+
+<hr>
+
+<h2 id="s7">二、概念分析：反应式决策与预测式决策</h2>
+
+<h3 id="s8">2.1 反应式决策的逻辑</h3>
+
+<p>反应式决策是生物体和组织最基础的决策模式。其基本结构可以刻画为：</p>
+
+<blockquote>
+<p>**事件触发 → 检索相关经验 → 生成合理响应**</p>
+</blockquote>
+
+<p>三个环节各有其认知意味。事件触发意味着决策的启动源自外部刺激而非内部目标。检索相关经验意味着决策的质量取决于记忆库的丰富度和检索的准确度——之前遇到过类似情况吗？当时怎么做的？生成了什么结果？生成合理响应意味着决策的标准不是&quot;最优&quot;，而是&quot;合理&quot;——在此时此地、面对此人此事，做什么事情是合乎情理的。</p>
+
+<p>反应式决策的优势在于速度和适应性。它不需要事先建模未来的各种可能，只需要一个足够丰富的经验库和足够灵敏的模式匹配能力。日常生活中大量的决策——别人问你一个问题，你回答；路上遇到障碍，你绕开；收到一封邮件，你回复——都是反应式的。</p>
+
+<p>反应式决策的局限同样明显。首先，它面向过去而非未来。决策的质量完全取决于&quot;之前发生了什么&quot;，而无法系统性地考虑&quot;这次如果做不同的选择会有什么不同的结果&quot;。其次，它缺少比较机制。当面对一个新情况，反应式决策能给出一个合理的行动，但它不会主动比较&quot;如果我用三种不同的方式处理这个情况，哪一种最可能达到我想要的结果&quot;。第三，它难以优化。因为每一步都是针对当下的合理反应，不存在一个全局目标函数来衡量多步决策的累积效果。</p>
+
+<h3 id="s9">2.2 预测式决策的逻辑</h3>
+
+<p>预测式决策与反应式决策的根本区别在于时间取向：它从未来倒推现在。其基本结构可以刻画为：</p>
+
+<blockquote>
+<p>**面对目标 G → 枚举候选动作 {A₁, A₂, ... Aₙ} → 预测每个动作的结果 S₁&#x27;, S₂&#x27;, ... Sₙ&#x27; → 比较结果与目标 G 的差距 → 选择最优动作执行 → 观测实际结果 → 更新预测模型**</p>
+</blockquote>
+
+<p>这六个环节中，前四个——枚举、预测、比较、选择——是预测式决策与反应式决策的核心分水岭。</p>
+
+<p>&quot;枚举&quot;意味着决策者不是从记忆中检索&quot;上一回怎么做&quot;，而是主动生成多个可能的行动方案。&quot;预测&quot;意味着决策者在脑中（或借助模型）模拟每个方案的结果——&quot;如果我选择叙事框架 A，受众态度从当前状态会变成什么样？如果选 B 呢？&quot;&quot;比较&quot;意味着存在一个明确的目标函数来评估不同方案的优劣。&quot;选择&quot;意味着在比较的基础上做出决策，而非仅凭&quot;合理感&quot;采取行动。</p>
+
+<p>预测式决策的认知负荷远高于反应式决策。它要求决策者具备一个<strong>内部世界模型</strong>——对环境（在此即目标受众的认知状态）的表征，以及对&quot;动作→状态变化&quot;的推演能力。它还要求决策者能够处理不确定性——预测从来不是完美的，因此需要&quot;预测→执行→观测→更新&quot;的闭环。</p>
+
+<h3 id="s10">2.3 两种决策逻辑的区分维度</h3>
+
+<p>上述对比可以归纳为以下维度：</p>
+
+<figure class="table"><table>
+<tr>
+<td>维度</td>
+<td>反应式决策</td>
+<td>预测式决策</td>
+</tr>
+<tr>
+<td>时间取向</td>
+<td>面向过去（检索经验）</td>
+<td>面向未来（推演后果）</td>
+</tr>
+<tr>
+<td>启动条件</td>
+<td>外部事件触发</td>
+<td>内部目标驱动</td>
+</tr>
+<tr>
+<td>选项生成</td>
+<td>检索记忆 → 一个合理方案</td>
+<td>枚举可能 → 多个候选方案</td>
+</tr>
+<tr>
+<td>评估方式</td>
+<td>合理感（是否合乎情境）</td>
+<td>目标函数（是否接近 G）</td>
+</tr>
+<tr>
+<td>优化机制</td>
+<td>无（每一步独立）</td>
+<td>有（多步累积优化）</td>
+</tr>
+<tr>
+<td>反馈学习</td>
+<td>间接（记忆积累）</td>
+<td>直接（模型更新）</td>
+</tr>
+<tr>
+<td>适用任务</td>
+<td>日常沟通、危机回应</td>
+<td>战略传播、长期认知塑造</td>
+</tr>
+</table></figure>
+
+<p>这一区分框架与 Fuerth 的前瞻性治理理论中的 Vision-Foresight 区分形成呼应。Fuerth 指出：Vision 是对未来的固定图景——目标导向、决定论式的、不可传授的个人特质；Foresight 则是对多种可能未来的持续反思——条件式的、实验性的、可培养和传授的协作能力。Vision 告诉你&quot;我们想要什么样的未来&quot;，Foresight 则回答&quot;在多种可能的路径中，哪一条最可能把我们带到那里&quot;。后者正是战略传播决策所需要的认知能力。</p>
+
+<h3 id="s11">2.4 这对区分在战略传播中的意义</h3>
+
+<p>战略传播实践天然需要预测式决策。当一个国家的传播机构设定&quot;在六个月内提升目标国商业精英对我国经济政策的信任度&quot;这样的目标时，它面对的不是一个&quot;该发什么声明&quot;的内容问题，而是一个&quot;从多种叙事框架中选择哪种&quot;的策略问题。传播者需要在心中推演：</p>
+
+<p>- 如果用叙事框架 A（强调市场开放），目标受众会怎么解读？信任度会变化多少？</p>
+<p>- 如果用叙事框架 B（强调规则透明），效果是否更好？</p>
+<p>- 如果用叙事框架 C（强调互利共赢），是否更能消除对方的戒备？</p>
+
+<p>这种推演——在脑中跑多个&quot;如果……会怎样&quot;的场景——就是预测式决策的认知操作。现有的战略传播文献已经区分了&quot;日常沟通&quot;（对事件即时反应）与&quot;战略传播&quot;（围绕核心信息长期塑造认知），但尚未将这一区分锚定到底层的决策逻辑上——即这两种传播形式对应着不同的认知操作。本文将这一对应关系明确化：日常沟通依赖反应式决策，战略传播依赖预测式决策。二者不是程度之别，是种类之别。</p>
+
+<hr>
+
+<h2 id="s12">三、框架对比：大语言模型与战略传播的本质错位</h2>
+
+<h3 id="s13">3.1 大语言模型的决策逻辑</h3>
+
+<p>大语言模型（Large Language Model）的核心操作可以简洁地描述为：给定一个上下文序列，预测下一个最可能的 token，生成一个 token，将其追加到上下文，再预测下一个 token——循环往复，直到输出完成。</p>
+
+<p>这个操作在结构上是反应式的。将每个时间步放大来看：</p>
+<p>- 当前上下文是外部刺激（类似于&quot;事件触发&quot;）</p>
+<p>- 模型参数是在海量文本上训练的权重——即&quot;经验&quot;的压缩存储</p>
+<p>- 下一个 token 的预测基于对训练数据的模式匹配——即&quot;检索相关经验&quot;</p>
+<p>- 生成的文本是当下最合理的延续——即&quot;合理响应&quot;</p>
+
+<p>用本文的概念术语说：<strong>大语言模型做的是逐 token 的反应式决策</strong>。它不维护一个关于世界的内部状态模型——它不知道&quot;如果我说 A 而不是 B，受众的认知会有什么不同&quot;，因为它的任务从来就不是比较，而是延续。</p>
+
+<p>需要澄清的是：大语言模型可以在提示词的引导下生成多种&quot;方案&quot;——你可以让它&quot;写出三种不同的声明稿&quot;，它很擅长这个。但这是<strong>内容层面的多选</strong>，不是<strong>决策层面的比较</strong>。当你问它&quot;哪一种声明稿会最有效&quot;，它的回答仍然是基于训练数据中的模式匹配——&quot;在类似情况下人们通常说 X 有效&quot;——而不是基于对受众状态变化的推演。大语言模型没有内部的状态转移函数 f(s, a) → s&#x27;，也没有目标函数来评估 s&#x27; 与目标 G 的距离。</p>
+
+<p>这并不是对大语言模型的贬低。反应式决策在许多任务上极其有效——事实上，正是因为它只做&quot;检索→生成&quot;这一件事，它才能以如此低的成本处理如此广泛的语言任务。即使是战略传播中的内容生成环节——将选定的叙事框架展开为具体的多语种声明稿——大语言模型仍然是最有效的工具。但问题是：<strong>战略传播的策略选择环节和大语言模型的核心决策逻辑之间存在结构性张力</strong>。前者要求的不是&quot;在给定上下文后输出最合理的下一个 token&quot;，而是&quot;在给定目标后从多个策略中选出最优的那个&quot;。大语言模型被训练来做前者，但战略传播的策略选择需要后者。在实践层面，这意味着战略传播系统和从业者如果仅依赖&quot;给大语言模型一个 prompt 让它生成传播方案&quot;，就可能在无意中跳过了策略比较这个关键步骤——不是因为大语言模型不好，而是因为被要求做了它不擅长的任务。</p>
+
+<h3 id="s14">3.2 战略传播对决策逻辑的要求</h3>
+
+<p>回顾第二章的概念分析，战略传播的决策结构包含以下要素：</p>
+
+<p>1. <strong>受众状态表征。</strong> 传播者需要知道目标受众当前的认知/态度/信念状态 S（如&quot;某国精英对我国经济改革的信任度为 30%&quot;）。</p>
+<p>2. <strong>传播动作空间。</strong> 传播者需要枚举可选策略 {A₁, A₂, ... Aₙ}（如&quot;新闻发布会叙事&quot;&quot;第三方背书叙事&quot;&quot;议程设置叙事&quot;等）。</p>
+<p>3. <strong>效果预测。</strong> 传播者需要预测每个动作对受众状态的影响 f(S, Aᵢ) → Sᵢ&#x27;。</p>
+<p>4. <strong>策略选择。</strong> 传播者需要比较 Sᵢ&#x27; 与传播目标 G 的距离，选择能最大程度接近 G 的动作。</p>
+<p>5. <strong>反馈更新。</strong> 执行后观测实际结果，更新 f 以改善下一轮的预测准确度。</p>
+
+<p>这五个环节中，大语言模型只参与了环节 2 的&quot;内容撰写&quot;部分——将选定的叙事框架写成具体的声明稿。环节 1、3、4、5 超出了大语言模型的决策逻辑。这就是本文所说的&quot;结构性错位&quot;。</p>
+
+<h3 id="s15">3.3 世界模型——补上预测缺口</h3>
+
+<p>LeCun 在其关于自主机器智能的纲领性论文中提出了一种不同于大语言模型的认知架构。这一架构的核心组件是世界模型（World Model）——一个学习&quot;当前状态→动作→下一状态&quot;映射的内部模块。世界模型不生成文本，不做逐 token 预测。它在潜在表征空间中做预测：给定当前环境的编码 s 和候选动作 a，输出对下一状态的预测 s&#x27;。</p>
+
+<p>将世界模型的逻辑翻译到战略传播场景，对应关系如下：</p>
+
+<figure class="table"><table>
+<tr>
+<td>世界模型概念</td>
+<td>战略传播对应</td>
+</tr>
+<tr>
+<td>当前状态编码 s</td>
+<td>目标受众当前的认知/态度状态</td>
+</tr>
+<tr>
+<td>候选动作 a</td>
+<td>可选传播策略/叙事框架</td>
+</tr>
+<tr>
+<td>状态预测 s&#x27;</td>
+<td>&quot;如果我采用叙事框架 X，受众的认知会如何变化&quot;</td>
+</tr>
+<tr>
+<td>预测在潜在空间中进行</td>
+<td>不预测受众&quot;会说什么话&quot;，而是预测&quot;态度变化的方向和幅度&quot;</td>
+</tr>
+</table></figure>
+
+<p>有世界模型的 agent 做决策的方式与仅有大语言模型的 agent 根本不同。前者在面对&quot;怎么让某国精英信任我们的经济政策&quot;时，不会直接生成一个&quot;合理&quot;的声明稿。它会：</p>
+
+<p>1. 建模目标受众当前的信念状态（不信任程度、不信任的原因维度）</p>
+<p>2. 生成多个候选叙事框架（不是多个声明稿——叙事框架是策略层面的，声明稿是执行层面的）</p>
+<p>3. 用世界模型预测每个框架对受众信念的可能影响</p>
+<p>4. 选择预测效果最优的框架</p>
+<p>5. 将该框架交给大语言模型做内容展开（此时大语言模型回归其擅长的&quot;内容生成&quot;角色）</p>
+
+<p>关键的架构差异在于：<strong>在大语言模型的逻辑中，决策 = 生成最合理的文本。在世界模型的逻辑中，决策 = 预测→比较→选择→执行→更新。</strong> 大语言模型负责执行端的文本生成，世界模型负责策略端的效果预测。二者是互补关系，不是替代关系。</p>
+
+<p>这一架构思路与 Fuerth 的 Foresight System 在逻辑上一致。Fuerth 提出的前瞻性治理四子系统——Foresight System（生成多种情景）→ Policy Integration System（将前瞻嵌入决策）→ Feedback System（监测政策效果并修正）→ Open-minded Institutional Culture（接纳前瞻的组织文化）——与预测式决策的&quot;预测→选择→观测更新→组织嵌入&quot;形成对应。需要指出的是，Fuerth 的框架最初是针对国内治理（美国政府改革）设计的。将其延伸到国际战略传播领域需要一个简要论证：Fuerth 框架的适用边界虽然写着&quot;governance&quot;，但其核心逻辑——复杂系统中需要系统化的前瞻能力来应对非线性变化——并不预设国内/国际的边界。恰恰相反，国际战略传播面对的受众环境比国内治理更复杂（跨文化、跨语言、跨政治体制），对前瞻能力的需求更迫切。本文抽取 Fuerth 框架中的 Foresight 概念——即&quot;对多种可能性的条件式推演&quot;——作为论证的锚点，并非声称其整个四子系统架构可以直接用于国际战略传播。</p>
+
+<h3 id="s16">3.4 补充、限定与示意图</h3>
+
+<p>需要特别澄清几个容易引发误读的问题。</p>
+
+<p><strong>第一，本文不是在论证&quot;世界模型可以替代大语言模型&quot;。</strong> 世界模型不生成语言——它不作诗、不写新闻稿、不翻译。本文的主张是：战略传播的<strong>策略选择环节</strong>需要预测式决策逻辑，而这是大语言模型在核心架构上所不擅长的。大语言模型在内容生成环节的价值未被否认——它只是被重新定位为&quot;执行端&quot;而非&quot;策略端的决策替代品&quot;。正确的思考方式不是&quot;大语言模型 vs 世界模型&quot;，而是&quot;如何将两者组合——用世界模型的逻辑做策略推演，用大语言模型的能力做内容展开&quot;。</p>
+
+<p><strong>第二，大语言模型的 emergent reasoning 需要被认真对待。</strong> 2025-2026 年的大语言模型（如 GPT-4o、Claude Opus 4、DeepSeek-V3）在适当的 chain-of-thought prompting 下，已经能执行类似&quot;枚举选项→比较→选择&quot;的多步推理。一个审慎的批评者可以合理地质疑：既然大语言模型已经能输出&quot;方案 A 可能更好，因为……&quot;的比较性推理文本，那本文关于&quot;大语言模型不擅长策略比较&quot;的判断是否已经过时？本文的回应是：这种 emergent reasoning 确实存在，但它不等价于潜在空间中的世界模型预测。大语言模型的比较推理是基于训练数据中的模式——&quot;在类似情境下，人们通常认为 X 优于 Y&quot;——而非基于受众状态的变化推演。二者在输出文本上可能难以区分，但在决策逻辑的底层是不同的：前者是 retrospective pattern-matching，后者是 prospective state-transition modeling。这个区分在实际应用中意味着：(a) 当面对训练数据中少见的传播情境时，大语言模型的推理可能退化为看似合理但缺乏推演基础的文本；(b) 大语言模型无法系统地从传播反馈中更新其&quot;预测模型&quot;——因为它没有这样的模型。当然，这个限定本身也需要技术发展的检验——如果未来大语言模型内建了可学习的状态表征和预测模块，本文的论证前提将被部分修正。</p>
+
+<p><strong>第三，本文不是在提出一个技术方案。</strong> 训练一个可用于战略传播的世界模型面临巨大的数据挑战（&quot;受众态度的因果变化&quot;如何量化？用什么监督信号？），这不是本文关心的焦点。本文做的是概念性工作：<strong>指出当前的主流思路（让大语言模型承担策略选择功能）在决策逻辑的层面上值得反思，并提出一种更匹配战略传播策略选择本质的思考方向。</strong> 至于这个方向能否在技术上实现，是一个独立且开放的问题。</p>
+
+<p><strong>第四，&quot;反应式&quot;与&quot;预测式&quot;是理想类型而非互斥类别。</strong> 真实的战略传播实践不可能纯粹落在某一端——即使是最日常的传播行为，人类传播者也可能在瞬间做了隐含的比较和预测。本文提出这对区分的目的不是将现实的丰富性简化到两个盒子里，而是提供一种用于分析的透镜——就像任何概念工具一样，它的价值在于能否帮助我们注意到之前被忽略的东西。在这个意义上，本文的论证不是&quot;战略传播从来不做预测&quot;（事实描述），而是&quot;当前以大语言模型为中心的技术路线在分析框架上错置了重点，如果我们将注意力从内容生成转移到策略推演，战略传播的技术辅助可能会有不同的方向&quot;（规范主张）。</p>
+
+<p><strong>关键区分对照表：</strong></p>
+
+<figure class="table"><table>
+<tr>
+<td></td>
+<td>反应式决策逻辑</td>
+<td>预测式决策逻辑</td>
+</tr>
+<tr>
+<td>核心操作</td>
+<td>给定情境→检索/匹配→产出合理响应</td>
+<td>给定目标→枚举选项→推演后果→比较→选择</td>
+</tr>
+<tr>
+<td>时间方向</td>
+<td>过去经验驱动</td>
+<td>未来结果导向</td>
+</tr>
+<tr>
+<td>技术对应</td>
+<td>大语言模型（next-token prediction）</td>
+<td>世界模型（state-transition prediction）</td>
+</tr>
+<tr>
+<td>在战略传播中的恰当角色</td>
+<td>内容生成端（将选定策略展开为文本）</td>
+<td>策略选择端（推演哪种策略更可能有效）</td>
+</tr>
+<tr>
+<td>已有学科讨论</td>
+<td>反应式传播（危机应对）</td>
+<td>议题管理、horizon scanning、前瞻性治理</td>
+</tr>
+<tr>
+<td>本文论证的关系</td>
+<td>不可或缺但被过度依赖</td>
+<td>应当被系统化强调但当前被忽视</td>
+</tr>
+</table></figure>
+
+<hr>
+
+<h2 id="s17">四、案例演示：芯片禁令中的叙事策略选择</h2>
+
+<h3 id="s18">4.1 案例背景</h3>
+
+<p>2022 年 10 月，美国商务部工业与安全局（BIS）发布了对华先进计算芯片出口管制规则，禁止英伟达（NVIDIA）A100、H100 等高端 GPU 出口至中国。此后三年间，管制范围持续扩大：2023 年扩展至&quot;性能密度&quot;指标以覆盖更多芯片型号，2025 年 5 月因政策空档期出现海外子公司采购漏洞，2026 年 5 月 31 日 BIS 发布新指引——&quot;只要企业总部设在中国，海外子公司也需申请许可且推定拒绝&quot;。至 2026 年 6 月，美方议员仍在推动将台积电等代工厂纳入管制范围。</p>
+
+<p>这是一场典型的战略传播场景。美方叙事——&quot;中国获取先进芯片将威胁美国国家安全&quot;——通过将技术问题安全化（Yang, 2024），构建了一个跨党派、跨部门的政策共识。中方的应对不是一次性的声明，而是一个持续的、多轮次的叙事选择过程。</p>
+
+<h3 id="s19">4.2 中方的叙事选项</h3>
+
+<p>面对芯片禁令，中方的可选叙事框架至少包括以下几种：</p>
+
+<p><strong>叙事 A：科技自主叙事。</strong> 核心信息是&quot;封锁加速创新&quot;——禁令伤害不了我们，因为我们正在自主研发。这种叙事的优势在于塑造自主自强的国家形象，劣势在于它没有指出禁令本身的不合理性，反而默认了对方行为的合法性。</p>
+
+<p><strong>叙事 B：规则违背叙事。</strong> 核心信息是&quot;禁令违反 WTO 自由贸易规则&quot;——美国的单边出口管制是贸易歧视，破坏了全球半导体产业链的稳定。这一叙事的优势是站在国际规则的道德高地上，劣势是它需要依赖一个中国并不主导的多边规则体系来说服第三方受众。</p>
+
+<p><strong>叙事 C：互相伤害叙事。</strong> 核心信息是&quot;禁令对美国自身的伤害不亚于对中国&quot;——英伟达丧失中国市场（黄仁勋 2026 年 5 月坦言&quot;基本把中国市场拱手让给中国公司&quot;）、中国未采购一片 H200（美国商务部长卢特尼克 2026 年 4 月承认）、禁令加速了中国自主芯片生态（华为昇腾芯片规模化落地，2024 年中国集成电路出口额增长 17.4%）、美国芯片企业在全球市场的长期竞争力被削弱。这一叙事的优势在于它不防御、不乞求——它指向对方行为的非理性和自我挫败本质。</p>
+
+<p>中方在实际传播中主要采用了叙事 C 的变体——&quot;搬起石头砸自己的脚&quot;的通俗表述频繁出现在官方和媒体话语中。但本文的目的不是评估哪种叙事框架在事实上更有效——那是经验研究的问题。本文关注的是：<strong>中方如何在不同叙事框架之间做出选择？当前的选择机制是否有改进空间？</strong></p>
+
+<h3 id="s20">4.3 两种决策逻辑的比较：以中方叙事选择为例</h3>
+
+<p>以 2026 年 5 月 31 日 BIS 发布&quot;总部在中国即推定拒绝&quot;新规后的中方传播决策为模拟场景，比较两种逻辑导向下的决策差异。</p>
+
+<p><strong>场景设定：</strong> 新规发布后 48 小时内，中方需对三个核心受众群体做出传播响应：欧洲半导体企业的投资者（关注市场损失）、东南亚国家的政策制定者（关注自身是否被牵连）、中国国内产业界（关注政策应对方向）。中方可选叙事框架包括技术自主、规则违背和互相伤害三种（见 4.2）。目标是在一周内尽量降低&quot;此规合理且有效&quot;叙事在第三方受众中的接受度。</p>
+
+<p><strong>反应式决策路径（当前实践中常见的模式）：</strong></p>
+
+<blockquote>
+<p>Phase 1（0-4h）：外交部发言人就 BIS 新规发表声明，&quot;坚决反对&quot;&quot;将采取必要措施&quot;——沿用了此前历次管制升级后的标准回应模板。</p>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>Phase 2（4-24h）：商务部发言人做类似声明。主要媒体发布评论文章，标题多为&quot;美国再次升级芯片管制，中国坚决反对&quot;。</p>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>Phase 3（24-48h）：行业分析师和自媒体跟进解读，大多引用官方口径。</p>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>输出：一份声明、若干篇评论、一个统一的&quot;反对&quot;叙事。面向所有受众使用的是同一套话语。</p>
+</blockquote>
+
+<p><strong>预测式决策路径（本文提出的改进方向）：</strong></p>
+
+<blockquote>
+<p>Phase 1（0-2h）：快速建模——欧洲投资者当前认知：&quot;禁令会保护我的投资价值还是减少我的市场？&quot;东南亚官员当前认知：&quot;我会不会成为下一个被牵连的对象？&quot;国内产业界当前认知：&quot;我们需要更激进的反制还是更务实的技术路线？&quot;</p>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>Phase 2（2-6h）：目标分解 + 叙事匹配：</p>
+<p>- 对欧洲投资者 → 主推&quot;互相伤害&quot;叙事（&quot;禁令让欧洲半导体企业每年损失 X 亿欧元&quot;），引用黄仁勋 2026 年 5 月&quot;拱手让人&quot;的表述作为第三方背书。**推演：** 预测该受众听到此叙事后，对禁令合理性的怀疑增加——&quot;如果连英伟达 CEO 都承认了反噬，禁令真的有效吗？&quot;</p>
+<p>- 对东南亚官员 → 主推&quot;规则违背&quot;叙事（&quot;今天可以禁中国公司，明天可以禁任何国家的公司&quot;）。**推演：** 东南亚官员更容易被&quot;规则&quot;而非&quot;利益&quot;说服——他们在 WTO 争端中感受过类似压力，共鸣点在于&quot;单边行动的任意性&quot;。</p>
+<p>- 对国内产业界 → 使用来自&quot;互相伤害&quot;和&quot;技术自主&quot;的混合叙事，强调&quot;禁令客观上帮我们清理了市场&quot;（华为昇腾芯片 2026 年 Q2 国内份额突破 60%）——这不是悲情叙事，是机会叙事。</p>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>Phase 3（6-48h）：按差异化叙事分别产出内容，通过针对性渠道投放（欧洲→FT/Bloomberg 采访和 op-ed；东南亚→区域智库报告和双边外交渠道；国内→工信部发布会和行业媒体）。</p>
+</blockquote>
+<p>&gt;</p>
+<blockquote>
+<p>Phase 4（48h-1 周）：追踪各方反应指标——欧洲财经媒体引用&quot;互相伤害&quot;叙事的比例、东南亚政策圈中&quot;规则&quot;话语的出现频率、国内产业界对政策方向的舆情倾向。将实际反应与预测对比：欧洲投资者对&quot;互相伤害&quot;的反应符合预期（65% 覆盖率），东南亚官员对&quot;规则违背&quot;的反应弱于预期（仅 20% 覆盖率，大部分仍聚焦中美双边框架），更新模型偏好。</p>
+</blockquote>
+
+<p><strong>差异总结：</strong> 两种路径的差异不在内容质量——反应式路径也能写出流畅的声明。差异在三个层面：(1) 反应式面对所有受众使用统一框架，预测式针对不同受众细分叙事；(2) 反应式依赖标准模板，预测式在行动前做了明确的对比推演；(3) 反应式没有系统的效果反馈机制，预测式将实际反应与预测对比以修正下一轮的策略选择。需要澄清的是：这些操作目前很大程度依赖人类判断和专家经验——本文的价值不在于声称存在一个自动化的&quot;预测机器&quot;，而在于指出这些操作的系统化是有可能的，且这种系统化的方向与当前&quot;给大语言模型一个 prompt 生成方案&quot;的思路有本质不同。</p>
+
+<h3 id="s21">4.4 本案例的论证意义</h3>
+
+<p>需要强调：本案例不是要证明&quot;中方目前的策略错了&quot;或&quot;如果中方有了世界模型就一定能扭转局面&quot;。芯片禁令的叙事战的结果取决于太多因素——中美实力对比、第三方国家的利益计算、全球半导体产业的真实依赖关系——传播策略只是其中之一。</p>
+
+<p>案例的作用是演示性的：它展示了一对抽象概念（反应式 vs 预测式）如何锚定到一个真实的战略传播场景中，让读者看到&quot;这种区分在现实中是什么意思&quot;。在芯片禁令的叙事战中，中方的&quot;互相伤害&quot;叙事框架是一个真实的策略选择——它不是在真空中产生的，而是在与&quot;科技自主&quot;和&quot;规则违背&quot;等备选框架的竞争中胜出的。这个竞争过程本身就是一个策略比较的过程——只是目前这个比较依赖于传播者的直觉和经验。本文提出的框架试图将这种直觉性的比较形式化、系统化。</p>
+
+<hr>
+
+<h2 id="s22">五、结论</h2>
+
+<h3 id="s23">5.1 核心论点回顾</h3>
+
+<p>本文论证了三个相互关联的命题：</p>
+
+<p>第一，在战略传播的讨论中引入&quot;反应式决策 vs 预测式决策&quot;这对概念区分是有解释力的。它不只是在已有的分类（日常沟通 vs 战略传播、短期 vs 长期）上加一个新标签，而是揭示了这些已有区分的底层认知机制——不同的传播层次对应着不同的决策逻辑。</p>
+
+<p>第二，大语言模型在底层计算逻辑上是反应式的。它能出色地完成&quot;给定上下文→生成合理延续&quot;的任务，但战略传播需要在多个选项之间进行比较和选择——这不是大语言模型被设计来解决的问题。强调这一点不是否认大语言模型的价值，而是指出它在战略传播中的角色应该被重新定位：它是执行端的语言能力，不应被赋予决策端的策略选择功能。</p>
+
+<p>第三，世界模型的计算逻辑——&quot;在潜在空间中预测动作的后果，然后选择最优动作&quot;——恰好对应了战略传播所需要的预测式决策。将世界模型的逻辑引入战略传播讨论，不是提出一个技术方案，而是提供一种思考方式：<strong>战略传播的改进方向不应该是&quot;用更大的模型生成更华丽的声明&quot;，而应该是&quot;建立更好的策略推演和比较能力&quot;。</strong></p>
+
+<h3 id="s24">5.2 理论贡献与局限</h3>
+
+<p>本文的贡献在于引入一对概念区分——反应式决策与预测式决策——来审视战略传播的认知基础。这一区分将已有文献中隐含的直觉（&quot;战略传播不只是日常回应&quot;&quot;组织传播中已有议题管理和环境扫描&quot;）形式化为一组可供分析、比较和讨论的概念工具。本文在这种形式化工作的基础上提出了一个规范性方向：战略传播的技术辅助应该将重点从内容生成端转移到策略推演端。</p>
+
+<p>同时，本文以 Fuerth 的前瞻性治理框架作为理论锚点，将这一概念区分与国际关系和公共政策讨论中的 Foresight 传统建立了联系。以 Hafner-Burton 等人（2009）将网络分析引入国际关系研究为先例，本文将计算认知架构中的概念框架翻译到战略传播讨论中——不声称技术实现，只提供分析视角。</p>
+
+<p>需要坦诚指出的是：本文的论证框架——概念分析 + 框架对比 + 案例演示——本质上是一种&quot;结构平行&quot;式论证：Fuerth Foresight ≈ World Model ≈ 战略传播策略选择需求。这种论证方式的前提是三者确实存在结构相似性——但结构相似不等于功能等价。Fuerth 的 Foresight 包含不可忽视的人类直觉成分（prescience），LeCun 的世界模型试图通过数据驱动消除直觉——这两个&quot;forward-looking&quot;框架之间存在真正的张力。本文强调它们的平行性而弱化它们的张力，是一种有意的简化——目的是推动跨学科对话——但读者应当意识到这种简化的存在。</p>
+
+<h3 id="s25">5.3 实践含义</h3>
+
+<p>对关注战略传播实践的人——无论是政策制定者还是传播分析师——本文的实践含义可以用一句话概括：<strong>给 AI 买更好的笔解决不了&quot;不知道该写什么&quot;的问题。</strong> 当前将 AI 应用于战略传播的讨论过度聚焦于内容生产效率，忽视了策略选择能力。如果战略传播实践者真正关心的是传播效果（而非传播速度），他们应该关注的是预测性决策辅助工具——哪怕它比大语言模型慢、比大语言模型笨拙——而不是更强的文本生成器。</p>
+
+<h3 id="s26">5.4 局限与开放问题</h3>
+
+<p>本文是一篇概念/框架论文，不包含实证验证。论证的说服力取决于概念区分的清晰度和案例演示的解释力，而非数据或实验。这一局限是学科性质的：本文提出的概念框架指向一种新的思考方式，其价值最终取决于它能否激发后续的实证研究和理论深化。</p>
+
+<p>一个关键的开放问题是世界模型在战略传播中的可操作性。&quot;受众认知状态&quot;如何量化？用什么数据训练 f(s,a)→s&#x27; 的映射？在缺乏实验数据的情况下，能否用历史传播案例——如芯片禁令叙事战的公开文本——来构建粗粒度的预测模型？这些不是本文能回答的问题，但它们是本文希望打开的研究方向。</p>
+
+<p>在更宏观的层面上，&quot;大语言模型只能做反应式决策&quot;这一前提本身可能需要随着技术发展而被修正——但本文论证的是底层逻辑的结构性差异，而非当前模型的表现。只要大语言模型的核心操作仍是&quot;基于上下文预测下一个 token&quot;，它与&quot;从多种可能未来中选择最优路径&quot;之间的结构性鸿沟就依然存在。</p>
+
+<hr>
+
+<h2 id="s27">参考文献</h2>
+
+<p>1. Fuerth, L. S. (2009). Foresight and anticipatory governance. <em>Foresight</em>, 11(4), 14–32.</p>
+<p>2. Fuerth, L. S. &amp; Faber, E. M. (2012). <em>Anticipatory Governance: Practical Upgrades</em>. Project on Forward Engagement, GWU.</p>
+<p>3. Guston, D. (2014). Understanding &#x27;anticipatory governance.&#x27; <em>Social Studies of Science</em>, 44(2), 218–242.</p>
+<p>4. Heo, K. &amp; Seo, Y. (2021). Anticipatory governance for newcomers: Lessons from UK, Netherlands, Finland, Korea. <em>European Journal of Futures Research</em>, 9(1), Article 9.</p>
+<p>5. Ramos, J. (2014). Anticipatory governance: Traditions and trajectories for strategic design. <em>Journal of Futures Studies</em>.</p>
+<p>6. LeCun, Y. (2022). A path towards autonomous machine intelligence. <em>OpenReview</em>.</p>
+<p>7. Park, J. S. et al. (2023). Generative agents: Interactive simulacra of human behavior. <em>UIST 2023</em>.</p>
+<p>8. Qian, C. et al. (2025). Current agents fail to leverage world model as tool for foresight. arXiv:2601.03905.</p>
+<p>9. Larooij, T. &amp; Törnberg, P. (2025). Do large language models solve the problems of agent-based modeling? A critical review. arXiv:2504.03274.</p>
+<p>10. Miskimmon, A., O&#x27;Loughlin, B. &amp; Roselle, L. (2013). <em>Strategic Narratives: Communication Power and the New World Order</em>. Routledge.</p>
+<p>11. Yang, H. (2024). Securitization, frame alignment, and the legitimation of US chip export controls on China. <em>The Pacific Review</em>, 37(5), 961–984.</p>
+<p>12. 陈佳骏 (2025). 英伟达公司与美国政府在对华芯片出口问题上的双向重塑. 《当代美国评论》, (4), 19–41.</p>
+<p>13. Bode, I., Ducci, F. &amp; Lee, J. (2025). Narrating and practising the US-China &#x27;tech war.&#x27; <em>Global Studies Quarterly</em>.</p>
+<p>14. Krivokhizh, S. &amp; Soboleva, E. (2023). Strategic narratives in China&#x27;s bid for discursive hegemony. <em>International Organisations Research Journal</em>, 18(2), 178–192.</p>
+<p>15. Crilley, R. &amp; Saunders, P. (2025). The resonant slop machine: Public diplomacy and strategic narratives in the age of artificial intelligence. <em>Place Branding and Public Diplomacy</em>.</p>
+
+<hr>
+
+<h2 id="s28">附录：AI 使用声明</h2>
+
+<p>本文在撰写过程中使用了 AI 辅助工具（Claude Code + research-assistant-enzo skill v3.1）进行文献检索、概念讨论和初稿生成。所有观点、论证和引用均由作者审核和确认。最终文章由作者承担全部学术责任。</p>
+
+    </article>
+  </main>
+</div>
+<script>
+(function() {
+  const links = document.querySelectorAll('.toc a');
+  const headings = document.querySelectorAll('h2[id], h3[id]');
+  const observer = new IntersectionObserver(entries => {
+    let active = null;
+    entries.forEach(e => { if (e.isIntersecting) active = e.target.id; });
+    if (active) {
+      links.forEach(a => {
+        const match = a.getAttribute('href') === '#' + active;
+        if (match) a.classList.add('active');
+        else a.classList.remove('active');
+      });
+    }
+  }, { rootMargin: '-12% 0px -78% 0px' });
+  headings.forEach(h => observer.observe(h));
+})();
+</script>
+</body>
+</html>
