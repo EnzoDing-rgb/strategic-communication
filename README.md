@@ -4,18 +4,11 @@
 
 ## 论文
 
-**在线阅读：** https://enzoding-rgb.github.io/strategic-communication/deck/从反应到预测-大语言模型与战略传播.html
+**在线阅读：** https://enzoding-rgb.github.io/strategic-communication/research/从反应到预测-大语言模型与战略传播.html
 
 > 直接点开即看，左侧目录导航，arXiv 风格排版。
 
-**本地启动：**
-
-```bash
-bash deck/start.sh
-# → http://localhost:8899
-```
-
-**源文件：** `deck/从反应到预测-大语言模型与战略传播.html`（HTML 为唯一稿件，无 Markdown）
+**源文件：** `research/从反应到预测-大语言模型与战略传播.html`（HTML 为唯一稿件，无 Markdown）
 
 ## 研究管线
 
