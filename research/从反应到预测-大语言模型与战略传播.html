@@ -131,14 +131,14 @@
 
   /* ── Author info ── */
   .author-info {
-    text-align: center;
+    display: table;
+    margin: 20px auto 10px;
     font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
     font-size: 14px;
     color: var(--muted);
-    line-height: 1.7;
-    margin: 20px 0 10px;
+    line-height: 1.8;
   }
-  .author-info p { margin: 2px 0; text-align: center; }
+  .author-info p { margin: 2px 0; text-align: left; }
 
   /* ── Tables ── */
   figure.table {
@@ -189,6 +189,122 @@
   code { font-family: 'SF Mono', 'Menlo', monospace; font-size: 13px; }
 
   /* ── Responsive ── */
+
+  /* ── Process Comparison Cards ── */
+  .comparison {
+    display: flex;
+    gap: 24px;
+    margin: 28px 0;
+    flex-wrap: wrap;
+  }
+  .comparison .panel {
+    flex: 1;
+    min-width: 280px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .panel.reactive { border-top: 4px solid #b8956a; }
+  .panel.predictive { border-top: 4px solid #2b6cb0; }
+
+  .panel-head {
+    padding: 14px 18px 6px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+  .panel-head .title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111;
+  }
+  .panel-head .subtitle {
+    font-size: 12px;
+    color: var(--light-muted);
+    margin-top: 2px;
+  }
+
+  .phase-card {
+    margin: 8px 14px;
+    padding: 12px 14px;
+    border-radius: 4px;
+    background: #fafbfc;
+    border-left: 3px solid #e1e4e8;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .panel.predictive .phase-card { border-left-color: #b0cde0; }
+  .panel.reactive .phase-card { border-left-color: #d4c5b0; }
+
+  .phase-card .phase-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-right: 6px;
+    padding: 2px 7px;
+    border-radius: 3px;
+  }
+  .panel.predictive .phase-label { background: #dbeafe; color: #1e40af; }
+  .panel.reactive .phase-label { background: #fef3c7; color: #92400e; }
+
+  .phase-card .phase-time {
+    font-size: 11px;
+    color: var(--light-muted);
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+  .phase-card .phase-body { margin-top: 6px; }
+
+  .phase-card .audience-row {
+    margin: 4px 0;
+    padding-left: 8px;
+    border-left: 2px solid #e1e4e8;
+    font-size: 13.5px;
+  }
+  .phase-card .audience-row .audience-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    min-width: 80px;
+  }
+
+  /* ── Summary Box ── */
+  .summary-box {
+    margin: 28px 0;
+    padding: 16px 20px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    border-left: 4px solid var(--accent);
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+  .summary-box .summary-title {
+    font-weight: 600;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    margin-bottom: 6px;
+    color: #111;
+  }
+
+  /* ── Framework Diagram Wrapper ── */
+  .framework-diagram {
+    margin: 28px 0;
+    text-align: center;
+  }
+  .framework-diagram svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ── Table Striping ── */
+  figure.table table tr:nth-child(even) td {
+    background: #fafbfc;
+  }
+  figure.table table tr:first-child th {
+    background: #f6f8fa;
+  }
+
   @media (max-width: 1100px) {
     :root { --toc-w: 200px; }
     .sidebar { padding: 28px 14px 32px 20px; }
@@ -205,7 +321,152 @@
   }
 
   @media print {
+    @page {
+      size: A4;
+      margin: 2.5cm 2.2cm 2.5cm 2.5cm;
+      @bottom-center {
+        content: counter(page);
+        font-family: "Noto Sans CJK SC", "PingFang SC", sans-serif;
+        font-size: 9pt;
+        color: #888;
+      }
+    }
+
     .sidebar { display: none; }
+    .main { margin-left: 0; }
+
+    body {
+      font-family: "Noto Serif CJK SC", "STIX Two Text", "Latin Modern Roman", "Georgia", serif;
+      font-size: 11pt;
+      line-height: 1.8;
+      color: #000;
+      background: #fff;
+    }
+
+    .paper { max-width: 100%; padding: 0; }
+
+    h1 {
+      font-family: "Noto Sans CJK SC", "PingFang SC", sans-serif;
+      font-size: 18pt;
+      font-weight: 700;
+      text-align: center;
+      margin: 36pt 0 24pt;
+      page-break-after: avoid;
+    }
+
+    h2 {
+      font-family: "Noto Sans CJK SC", "PingFang SC", sans-serif;
+      font-size: 13pt;
+      font-weight: 600;
+      margin: 28pt 0 10pt;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-family: "Noto Sans CJK SC", "PingFang SC", sans-serif;
+      font-size: 11.5pt;
+      font-weight: 600;
+      margin: 18pt 0 8pt;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 8pt;
+      text-align: justify;
+      orphans: 2;
+      widows: 2;
+    }
+
+    .author-info {
+      display: table;
+      margin: 20pt auto 28pt;
+      font-family: "Noto Sans CJK SC", "PingFang SC", sans-serif;
+      font-size: 11pt;
+      color: #333;
+      line-height: 2;
+    }
+    .author-info p { margin: 1pt 0; text-align: left; }
+
+    blockquote {
+      margin: 12pt 0;
+      padding: 8pt 16pt;
+      border-left: 3px solid #555;
+      font-size: 10.5pt;
+      page-break-inside: avoid;
+    }
+
+    figure.table { page-break-inside: avoid; }
+
+    table {
+      font-size: 9.5pt;
+      font-family: "Noto Sans CJK SC", "PingFang SC", sans-serif;
+    }
+    th { border-top: 2px solid #000; border-bottom: 1.5px solid #000; }
+    td { border-bottom: 0.5px solid #999; }
+
+    a { color: #000; text-decoration: none; }
+
+    hr {
+      border-color: #999;
+      margin: 24pt 0;
+    }
+
+    pre {
+      font-size: 9pt;
+      page-break-inside: avoid;
+    }
+
+
+    /* ── Process cards in print ── */
+    .comparison {
+      display: flex;
+      gap: 16px;
+      margin: 16pt 0;
+    }
+    .comparison .panel {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      page-break-inside: avoid;
+    }
+    .panel.reactive { border-top: 4px solid #999; }
+    .panel.predictive { border-top: 4px solid #2b6cb0; }
+
+    .panel-head { padding: 10pt 14pt 4pt; }
+    .panel-head .title { font-size: 13pt; font-weight: 700; }
+    .panel-head .subtitle { font-size: 9pt; color: #666; }
+
+    .phase-card {
+      margin: 6pt 10pt;
+      padding: 8pt 10pt;
+      border-left: 3px solid #ddd;
+      font-size: 9pt;
+      line-height: 1.5;
+    }
+    .phase-card .phase-label { font-size: 8pt; }
+    .phase-card .phase-time { font-size: 8pt; }
+    .phase-card .audience-row { font-size: 8.5pt; margin: 2pt 0; }
+
+    /* ── Summary box in print ── */
+    .summary-box {
+      margin: 16pt 0;
+      padding: 10pt 14pt;
+      border: 1px solid #ccc;
+      border-left: 4px solid #555;
+      font-size: 9.5pt;
+      page-break-inside: avoid;
+    }
+
+    /* ── Framework diagram in print ── */
+    .framework-diagram {
+      margin: 16pt 0;
+      page-break-inside: avoid;
+    }
+    .framework-diagram svg { max-width: 100%; }
+
+    strong { color: #000; font-weight: 700; }
+  }
     .main { margin-left: 0; }
     body { font-size: 11pt; }
     .paper { max-width: 100%; padding: 0; }
@@ -229,15 +490,73 @@
   <p>课程：战略传播与国际新秩序</p>
 </div>
 
-<hr>
-
 <h2 id="s2">摘要</h2>
 
 <p>人工智能特别是大语言模型的迅速发展引发了其能否应用于战略传播——即国家间旨在塑造受众长期认知的传播活动——的广泛讨论。一种颇具影响的假设认为，大语言模型凭借其强大的文本生成能力可以成为战略传播的有效工具。本文对这一假设提出审慎质疑，指出当前讨论存在一个被忽视的结构性问题：大语言模型在底层计算逻辑上擅长的是反应式决策（检索已有知识→生成合理回应），而战略传播的决策环节——在多个候选策略之间做出有效选择——需要的是预测式决策逻辑（枚举候选策略→推演后果→比较→选择最优）。当前以&quot;内容生产&quot;为中心的大语言模型应用思路，可能错置了战略传播实践的重点：重点不是&quot;生成更华丽的文本&quot;，而是&quot;在开口之前推演不同策略的可能后果&quot;。引入 Fuerth 的前瞻性治理（Anticipatory Governance）框架和 LeCun 的世界模型（World Model）概念，本文提出一种替代性的思考方式：战略传播的改进方向应从内容生成端转向策略推演端。以美国对华芯片禁令（2022-2026）为案例，本文展示&quot;互相伤害&quot;叙事框架的选择如何体现预测式决策逻辑的价值。本文的贡献在于引入一对概念区分——反应式决策与预测式决策——来审视战略传播的认知基础，从而为理解大语言模型在战略传播中的恰当角色提供一个经过论证的分析框架。</p>
 
 <p><strong>关键词：</strong> 战略传播；大语言模型；世界模型；预测式决策；前瞻性治理；芯片禁令</p>
 
-<hr>
+<div class="framework-diagram">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 740 370" width="740" height="370" style="font-family:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <defs>
+    <filter id="shadow" x="-2%" y="-2%" width="104%" height="108%">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#00000015"/>
+    </filter>
+  </defs>
+
+  <!-- Title -->
+  <text x="370" y="30" text-anchor="middle" font-size="16" font-weight="700" fill="#1a202c">战略传播的决策逻辑框架</text>
+  <text x="370" y="52" text-anchor="middle" font-size="12" fill="#718096">从"生成更华丽的文本"转向"推演不同策略的后果"</text>
+
+  <!-- Left box: Reactive -->
+  <rect x="20" y="74" width="335" height="240" rx="6" fill="#faf7f2" stroke="#d4c5b0" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="20" y="74" width="335" height="36" rx="6" fill="#f0e8d8"/>
+  <rect x="20" y="98" width="335" height="12" fill="#f0e8d8"/>
+  <text x="187" y="97" text-anchor="middle" font-size="15" font-weight="700" fill="#7c5f38">反应式决策逻辑</text>
+
+  <text x="187" y="130" text-anchor="middle" font-size="13" fill="#4a5568">事件触发 → 检索经验 → 生成合理响应</text>
+  <line x1="60" y1="142" x2="315" y2="142" stroke="#e8ddd0" stroke-width="1"/>
+
+  <rect x="50" y="155" width="275" height="28" rx="4" fill="#ffffff" stroke="#e8ddd0" stroke-width="1"/>
+  <text x="187" y="174" text-anchor="middle" font-size="12" fill="#2d3748">▸ 大语言模型（next-token prediction）</text>
+
+  <rect x="50" y="190" width="275" height="28" rx="4" fill="#ffffff" stroke="#e8ddd0" stroke-width="1"/>
+  <text x="187" y="209" text-anchor="middle" font-size="12" fill="#2d3748">▸ 角色：<tspan font-weight="600">内容生成</tspan>（执行端）</text>
+
+  <rect x="50" y="225" width="275" height="28" rx="4" fill="#ffffff" stroke="#e8ddd0" stroke-width="1"/>
+  <text x="187" y="244" text-anchor="middle" font-size="12" fill="#2d3748">▸ 当前：被过度依赖，但不可或缺</text>
+
+  <text x="187" y="295" text-anchor="middle" font-size="11" fill="#a08868">擅长：文本延续、模式匹配</text>
+
+  <!-- Right box: Predictive -->
+  <rect x="385" y="74" width="335" height="240" rx="6" fill="#f4f8fc" stroke="#b0cde0" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="385" y="74" width="335" height="36" rx="6" fill="#dbeafe"/>
+  <rect x="385" y="98" width="335" height="12" fill="#dbeafe"/>
+  <text x="552" y="97" text-anchor="middle" font-size="15" font-weight="700" fill="#1e40af">预测式决策逻辑</text>
+
+  <text x="552" y="130" text-anchor="middle" font-size="13" fill="#4a5568">目标 → 枚举 → 推演 → 比较 → 选择</text>
+  <line x1="425" y1="142" x2="680" y2="142" stroke="#d0dce8" stroke-width="1"/>
+
+  <rect x="415" y="155" width="275" height="28" rx="4" fill="#ffffff" stroke="#d0dce8" stroke-width="1"/>
+  <text x="552" y="174" text-anchor="middle" font-size="12" fill="#2d3748">▸ 世界模型（state-transition prediction）</text>
+
+  <rect x="415" y="190" width="275" height="28" rx="4" fill="#ffffff" stroke="#d0dce8" stroke-width="1"/>
+  <text x="552" y="209" text-anchor="middle" font-size="12" fill="#2d3748">▸ 角色：<tspan font-weight="600">策略选择</tspan>（决策端）</text>
+
+  <rect x="415" y="225" width="275" height="28" rx="4" fill="#ffffff" stroke="#d0dce8" stroke-width="1"/>
+  <text x="552" y="244" text-anchor="middle" font-size="12" fill="#2d3748">▸ 当前：被系统性忽视，应当被强调</text>
+
+  <text x="552" y="295" text-anchor="middle" font-size="11" fill="#6888a8">擅长：效果预测、策略比较</text>
+
+  <!-- Center arrow -->
+  <line x1="355" y1="194" x2="383" y2="194" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <polygon points="381,190 391,194 381,198" fill="#94a3b8"/>
+
+  <!-- Bottom bar -->
+  <rect x="80" y="330" width="580" height="28" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="370" y="349" text-anchor="middle" font-size="12" font-weight="600" fill="#475569">互补组合：世界模型推演策略（决策端）→ 大语言模型展开内容（执行端）</text>
+</svg>
+</div>
 
 <h2 id="s3">一、引言：战略传播与大语言模型——一个未经验证的假设</h2>
 
@@ -266,8 +585,6 @@
 <p>在此基础上，本文引入两条理论资源来建构替代方案。一是 Fuerth 的前瞻性治理框架，该框架区分了&quot;愿景&quot;（Vision，固定的未来图景）与&quot;前瞻&quot;（Foresight，对多种可能性的持续推演），这与反应式/预测式这对区分高度平行。二是 LeCun 的世界模型概念——一种在潜在空间中预测&quot;当前状态→动作→下一状态&quot;的认知架构，恰好对应了&quot;枚举选项→推演后果→比较&quot;的决策逻辑。</p>
 
 <p>本文采用概念分析与框架对比相结合的方法，辅以案例演示。结构如下：第二章进行概念分析，区分反应式与预测式两种决策逻辑。第三章进行框架对比，将大语言模型与世界模型分别对接到两种决策逻辑上。第四章以美国对华芯片禁令为案例，展示上述概念区分在真实战略传播场景中的解释力。第五章总结贡献与局限。</p>
-
-<hr>
 
 <h2 id="s7">二、概念分析：反应式决策与预测式决策</h2>
 
@@ -357,8 +674,6 @@
 <p>- 如果用叙事框架 C（强调互利共赢），是否更能消除对方的戒备？</p>
 
 <p>这种推演——在脑中跑多个&quot;如果……会怎样&quot;的场景——就是预测式决策的认知操作。现有的战略传播文献已经区分了&quot;日常沟通&quot;（对事件即时反应）与&quot;战略传播&quot;（围绕核心信息长期塑造认知），但尚未将这一区分锚定到底层的决策逻辑上——即这两种传播形式对应着不同的认知操作。本文将这一对应关系明确化：日常沟通依赖反应式决策，战略传播依赖预测式决策。二者不是程度之别，是种类之别。</p>
-
-<hr>
 
 <h2 id="s12">三、框架对比：大语言模型与战略传播的本质错位</h2>
 
@@ -483,8 +798,6 @@
 </tr>
 </table></figure>
 
-<hr>
-
 <h2 id="s17">四、案例演示：芯片禁令中的叙事策略选择</h2>
 
 <h3 id="s18">4.1 案例背景</h3>
@@ -511,48 +824,84 @@
 
 <p><strong>场景设定：</strong> 新规发布后 48 小时内，中方需对三个核心受众群体做出传播响应：欧洲半导体企业的投资者（关注市场损失）、东南亚国家的政策制定者（关注自身是否被牵连）、中国国内产业界（关注政策应对方向）。中方可选叙事框架包括技术自主、规则违背和互相伤害三种（见 4.2）。目标是在一周内尽量降低&quot;此规合理且有效&quot;叙事在第三方受众中的接受度。</p>
 
-<p><strong>反应式决策路径（当前实践中常见的模式）：</strong></p>
+<div class="comparison">
 
-<blockquote>
-<p>Phase 1（0-4h）：外交部发言人就 BIS 新规发表声明，&quot;坚决反对&quot;&quot;将采取必要措施&quot;——沿用了此前历次管制升级后的标准回应模板。</p>
-</blockquote>
-<blockquote>
-<p>Phase 2（4-24h）：商务部发言人做类似声明。主要媒体发布评论文章，标题多为&quot;美国再次升级芯片管制，中国坚决反对&quot;。</p>
-</blockquote>
-<blockquote>
-<p>Phase 3（24-48h）：行业分析师和自媒体跟进解读，大多引用官方口径。</p>
-</blockquote>
-<blockquote>
-<p>输出：一份声明、若干篇评论、一个统一的&quot;反对&quot;叙事。面向所有受众使用的是同一套话语。</p>
-</blockquote>
+  <!-- REACTIVE PANEL -->
+  <div class="panel reactive">
+    <div class="panel-head">
+      <div class="title">反应式决策路径</div>
+      <div class="subtitle">当前实践中常见的模式</div>
+    </div>
 
-<p><strong>预测式决策路径（本文提出的改进方向）：</strong></p>
+    <div class="phase-card">
+      <span class="phase-label">Phase 1</span><span class="phase-time">0–4 h</span>
+      <div class="phase-body">外交部发言人就 BIS 新规发表声明，&quot;坚决反对&quot;&quot;将采取必要措施&quot;——沿用了此前历次管制升级后的标准回应模板。</div>
+    </div>
 
-<blockquote>
-<p>Phase 1（0-2h）：快速建模——欧洲投资者当前认知：&quot;禁令会保护我的投资价值还是减少我的市场？&quot;东南亚官员当前认知：&quot;我会不会成为下一个被牵连的对象？&quot;国内产业界当前认知：&quot;我们需要更激进的反制还是更务实的技术路线？&quot;</p>
-</blockquote>
-<blockquote>
-<p>Phase 2（2-6h）：目标分解 + 叙事匹配：</p>
-<p>- 对欧洲投资者 → 主推&quot;互相伤害&quot;叙事（&quot;禁令让欧洲半导体企业每年损失 X 亿欧元&quot;），引用黄仁勋 2026 年 5 月&quot;拱手让人&quot;的表述作为第三方背书。<strong>推演：</strong> 预测该受众听到此叙事后，对禁令合理性的怀疑增加——&quot;如果连英伟达 CEO 都承认了反噬，禁令真的有效吗？&quot;</p>
-<p>- 对东南亚官员 → 主推&quot;规则违背&quot;叙事（&quot;今天可以禁中国公司，明天可以禁任何国家的公司&quot;）。<strong>推演：</strong> 东南亚官员更容易被&quot;规则&quot;而非&quot;利益&quot;说服——他们在 WTO 争端中感受过类似压力，共鸣点在于&quot;单边行动的任意性&quot;。</p>
-<p>- 对国内产业界 → 使用来自&quot;互相伤害&quot;和&quot;技术自主&quot;的混合叙事，强调&quot;禁令客观上帮我们清理了市场&quot;（华为昇腾芯片 2026 年 Q2 国内份额突破 60%）——这不是悲情叙事，是机会叙事。</p>
-</blockquote>
-<blockquote>
-<p>Phase 3（6-48h）：按差异化叙事分别产出内容，通过针对性渠道投放（欧洲→FT/Bloomberg 采访和 op-ed；东南亚→区域智库报告和双边外交渠道；国内→工信部发布会和行业媒体）。</p>
-</blockquote>
-<blockquote>
-<p>Phase 4（48h-1 周）：追踪各方反应指标——欧洲财经媒体引用&quot;互相伤害&quot;叙事的比例、东南亚政策圈中&quot;规则&quot;话语的出现频率、国内产业界对政策方向的舆情倾向。将实际反应与预测对比：欧洲投资者对&quot;互相伤害&quot;的反应符合预期（65% 覆盖率），东南亚官员对&quot;规则违背&quot;的反应弱于预期（仅 20% 覆盖率，大部分仍聚焦中美双边框架），更新模型偏好。</p>
-</blockquote>
+    <div class="phase-card">
+      <span class="phase-label">Phase 2</span><span class="phase-time">4–24 h</span>
+      <div class="phase-body">商务部发言人做类似声明。主要媒体发布评论文章，标题多为&quot;美国再次升级芯片管制，中国坚决反对&quot;。</div>
+    </div>
 
-<p><strong>差异总结：</strong> 两种路径的差异不在内容质量——反应式路径也能写出流畅的声明。差异在三个层面：(1) 反应式面对所有受众使用统一框架，预测式针对不同受众细分叙事；(2) 反应式依赖标准模板，预测式在行动前做了明确的对比推演；(3) 反应式没有系统的效果反馈机制，预测式将实际反应与预测对比以修正下一轮的策略选择。这些操作目前很大程度依赖人类判断和专家经验——本文的价值不在于声称存在一个自动化的&quot;预测机器&quot;，而在于指出这些操作的系统化是有可能的，且这种系统化的方向与当前&quot;给大语言模型一个 prompt 生成方案&quot;的思路有本质不同。</p>
+    <div class="phase-card">
+      <span class="phase-label">Phase 3</span><span class="phase-time">24–48 h</span>
+      <div class="phase-body">行业分析师和自媒体跟进解读，大多引用官方口径。</div>
+    </div>
+
+    <div class="phase-card">
+      <span class="phase-label">输出</span>
+      <div class="phase-body">一份声明、若干篇评论、一个统一的&quot;反对&quot;叙事。<strong>面向所有受众使用同一套话语。</strong></div>
+    </div>
+  </div>
+
+  <!-- PREDICTIVE PANEL -->
+  <div class="panel predictive">
+    <div class="panel-head">
+      <div class="title">预测式决策路径</div>
+      <div class="subtitle">本文提出的改进方向</div>
+    </div>
+
+    <div class="phase-card">
+      <span class="phase-label">Phase 1</span><span class="phase-time">0–2 h</span>
+      <div class="phase-body"><strong>快速建模，区分受众：</strong>
+        <div class="audience-row"><span class="audience-tag">欧洲投资者</span>&quot;禁令会保护我的投资价值还是减少我的市场？&quot;</div>
+        <div class="audience-row"><span class="audience-tag">东南亚官员</span>&quot;我会不会成为下一个被牵连的对象？&quot;</div>
+        <div class="audience-row"><span class="audience-tag">国内产业界</span>&quot;我们需要更激进的反制还是更务实的技术路线？&quot;</div>
+      </div>
+    </div>
+
+    <div class="phase-card">
+      <span class="phase-label">Phase 2</span><span class="phase-time">2–6 h</span>
+      <div class="phase-body"><strong>目标分解 + 叙事匹配：</strong>
+        <div class="audience-row"><span class="audience-tag">→ 欧洲投资者</span>主推&quot;互相伤害&quot;叙事（&quot;禁令让欧洲半导体企业每年损失 X 亿欧元&quot;），引用黄仁勋 2026 年 5 月&quot;拱手让人&quot;的表述作为第三方背书。<strong>推演：</strong>预测该受众听到此叙事后，对禁令合理性的怀疑增加——&quot;如果连英伟达 CEO 都承认了反噬，禁令真的有效吗？&quot;</div>
+        <div class="audience-row"><span class="audience-tag">→ 东南亚官员</span>主推&quot;规则违背&quot;叙事（&quot;今天可以禁中国公司，明天可以禁任何国家的公司&quot;）。<strong>推演：</strong>东南亚官员更容易被&quot;规则&quot;而非&quot;利益&quot;说服——他们在 WTO 争端中感受过类似压力，共鸣点在于&quot;单边行动的任意性&quot;。</div>
+        <div class="audience-row"><span class="audience-tag">→ 国内产业界</span>混合&quot;互相伤害&quot;与&quot;技术自主&quot;叙事，强调&quot;禁令客观上帮我们清理了市场&quot;（华为昇腾芯片 2026 年 Q2 国内份额突破 60%）——不是悲情叙事，是机会叙事。</div>
+      </div>
+    </div>
+
+    <div class="phase-card">
+      <span class="phase-label">Phase 3</span><span class="phase-time">6–48 h</span>
+      <div class="phase-body">按差异化叙事分别产出内容，通过针对性渠道投放：欧洲 → FT/Bloomberg 采访和 op-ed；东南亚 → 区域智库报告和双边外交渠道；国内 → 工信部发布会和行业媒体。</div>
+    </div>
+
+    <div class="phase-card">
+      <span class="phase-label">Phase 4</span><span class="phase-time">48 h – 1 周</span>
+      <div class="phase-body"><strong>追踪 → 对比 → 更新模型：</strong>欧洲财经媒体引用&quot;互相伤害&quot;叙事的比例、东南亚政策圈中&quot;规则&quot;话语的出现频率、国内产业界对政策方向的舆情倾向。将实际反应与预测对比——欧洲投资者反应符合预期（65% 覆盖率），东南亚官员反应弱于预期（仅 20% 覆盖率，大部分仍聚焦中美双边框架）——据此更新模型偏好。</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="summary-box">
+  <div class="summary-title">差异总结</div>
+  两种路径的差异不在内容质量——反应式路径也能写出流畅的声明。差异在三个层面：(1) 反应式面对所有受众使用统一框架，预测式针对不同受众细分叙事；(2) 反应式依赖标准模板，预测式在行动前做了明确的对比推演；(3) 反应式没有系统的效果反馈机制，预测式将实际反应与预测对比以修正下一轮的策略选择。这些操作目前很大程度依赖人类判断和专家经验——本文的价值不在于声称存在一个自动化的&quot;预测机器&quot;，而在于指出这些操作的系统化是有可能的，且这种系统化的方向与当前&quot;给大语言模型一个 prompt 生成方案&quot;的思路有本质不同。
+</div>
 
 <h3 id="s21">4.4 本案例的论证意义</h3>
 
 <p>本案例不是要证明&quot;中方目前的策略错了&quot;或&quot;如果中方有了世界模型就一定能扭转局面&quot;。芯片禁令的叙事战的结果取决于太多因素——中美实力对比、第三方国家的利益计算、全球半导体产业的真实依赖关系——传播策略只是其中之一。</p>
 
 <p>案例的作用是演示性的：它展示了一对抽象概念（反应式 vs 预测式）如何锚定到一个真实的战略传播场景中，让读者看到&quot;这种区分在现实中是什么意思&quot;。在芯片禁令的叙事战中，中方的&quot;互相伤害&quot;叙事框架是一个真实的策略选择——它不是在真空中产生的，而是在与&quot;科技自主&quot;和&quot;规则违背&quot;等备选框架的竞争中胜出的。这个竞争过程本身就是一个策略比较的过程——只是目前这个比较依赖于传播者的直觉和经验。本文提出的框架试图将这种直觉性的比较形式化、系统化。</p>
-
-<hr>
 
 <h2 id="s22">五、结论</h2>
 
@@ -585,8 +934,6 @@
 <p>一个关键的开放问题是世界模型在战略传播中的可操作性。&quot;受众认知状态&quot;如何量化？用什么数据训练 f(s,a)→s&#x27; 的映射？在缺乏实验数据的情况下，能否用历史传播案例——如芯片禁令叙事战的公开文本——来构建粗粒度的预测模型？这些不是本文能回答的问题，但它们是本文希望打开的研究方向。</p>
 
 <p>在更宏观的层面上，&quot;大语言模型只能做反应式决策&quot;这一前提本身可能需要随着技术发展而被修正——但本文论证的是底层逻辑的结构性差异，而非当前模型的表现。只要大语言模型的核心操作仍是&quot;基于上下文预测下一个 token&quot;，它与&quot;从多种可能未来中选择最优路径&quot;之间的结构性鸿沟就依然存在。</p>
-
-<hr>
 
 <h2 id="s27">参考文献</h2>
 
