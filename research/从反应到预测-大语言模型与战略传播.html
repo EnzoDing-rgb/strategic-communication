@@ -123,7 +123,15 @@
 
   .no-indent p, .author-info p, blockquote p, .toc p,
   .panel-head p, .summary-box p, .framework-diagram p,
-  figure.table p, .comparison-table td { text-indent: 0; }
+  figure.table p, .comparison-table td, .references p { text-indent: 0; }
+
+  .page-break { page-break-before: always; }
+
+  .references p {
+    font-size: 14px;
+    line-height: 1.65;
+    margin-bottom: 6px;
+  }
 
   /* ── Blockquote ── */
   blockquote {
@@ -334,7 +342,18 @@
     }
     .no-indent p, .author-info p, blockquote p,
     .panel-head p, .summary-box p, .framework-diagram p,
-    figure.table p, .comparison-table td { text-indent: 0; }
+    figure.table p, .comparison-table td, .references p { text-indent: 0; }
+
+    .page-break { page-break-before: always; }
+
+    .references p {
+      font-size: 9pt;
+      line-height: 1.55;
+      margin-bottom: 4pt;
+    }
+
+    /* Force references to new page (margin workaround for weasyprint page-break bug) */
+    #s27 { margin-top: 200pt; }
 
     /* Prevent CJK-Latin inter-word spacing artifacts */
     body { word-spacing: 0; }
@@ -807,7 +826,7 @@
 
 <h3 id="s21">4.4 本案例的论证意义</h3>
 
-<p>本案例不是要证明&quot;中方目前的策略错了&quot;或&quot;如果中方有了世界模型就一定能扭转局面&quot;。芯片禁令的叙事战的结果取决于太多因素——中美实力对比、第三方国家的利益计算、全球半导体产业的真实依赖关系——传播策略只是其中之一。</p>
+<p>需要说明的是，本案例的目的并非评判中方现有策略选择的优劣，也无意论证某种分析框架能从根本上改变叙事竞争的格局。芯片禁令叙事战的结果受多重因素影响——中美实力对比、第三方国家的利益计算、全球半导体产业的真实依赖关系——传播策略只是其中之一。</p>
 
 <p>案例的作用是演示性的：它展示了一对抽象概念（反应式 vs 预测式）如何锚定到一个真实的战略传播场景中，让读者看到&quot;这种区分在现实中是什么意思&quot;。在芯片禁令的叙事战中，中方的&quot;互相伤害&quot;叙事框架是一个真实的策略选择——它不是在真空中产生的，而是在与&quot;科技自主&quot;和&quot;规则违背&quot;等备选框架的竞争中胜出的。这个竞争过程本身就是一个策略比较的过程——只是目前这个比较依赖于传播者的直觉和经验。本文提出的框架试图将这种直觉性的比较形式化、系统化。</p>
 
@@ -843,8 +862,10 @@
 
 <p>在更宏观的层面上，&quot;大语言模型只能做反应式决策&quot;这一前提本身可能需要随着技术发展而被修正——但本文论证的是底层逻辑的结构性差异，而非当前模型的表现。只要大语言模型的核心操作仍是&quot;基于上下文预测下一个 token&quot;，它与&quot;从多种可能未来中选择最优路径&quot;之间的结构性鸿沟就依然存在。</p>
 
+
 <h2 id="s27">参考文献</h2>
 
+<div class="references">
 <p>1. Fuerth, L. S. (2009). Foresight and anticipatory governance. <em>Foresight</em>, 11(4), 14–32.</p>
 <p>2. Fuerth, L. S. &amp; Faber, E. M. (2012). <em>Anticipatory Governance: Practical Upgrades</em>. Project on Forward Engagement, GWU.</p>
 <p>3. Guston, D. (2014). Understanding &#x27;anticipatory governance.&#x27; <em>Social Studies of Science</em>, 44(2), 218–242.</p>
@@ -860,6 +881,7 @@
 <p>13. Bode, I., Ducci, F. &amp; Lee, J. (2025). Narrating and practising the US-China &#x27;tech war.&#x27; <em>Global Studies Quarterly</em>.</p>
 <p>14. Krivokhizh, S. &amp; Soboleva, E. (2023). Strategic narratives in China&#x27;s bid for discursive hegemony. <em>International Organisations Research Journal</em>, 18(2), 178–192.</p>
 <p>15. Crilley, R. &amp; Saunders, P. (2025). The resonant slop machine: Public diplomacy and strategic narratives in the age of artificial intelligence. <em>Place Branding and Public Diplomacy</em>.</p>
+</div>
 
     </article>
   </main>
