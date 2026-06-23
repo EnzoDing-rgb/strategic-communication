@@ -118,8 +118,12 @@
     scroll-margin-top: 32px;
   }
 
-  p { margin: 0 0 14px; text-align: justify; }
+  p { margin: 0 0 14px; text-align: justify; text-indent: 2em; }
   strong { color: #111; font-weight: 600; }
+
+  .no-indent p, .author-info p, blockquote p, .toc p,
+  .panel-head p, .summary-box p, .framework-diagram p,
+  figure.table p, .comparison-table td { text-indent: 0; }
 
   /* ── Blockquote ── */
   blockquote {
@@ -324,9 +328,16 @@
     p {
       margin: 0 0 8pt;
       text-align: justify;
+      text-indent: 2em;
       orphans: 2;
       widows: 2;
     }
+    .no-indent p, .author-info p, blockquote p,
+    .panel-head p, .summary-box p, .framework-diagram p,
+    figure.table p, .comparison-table td { text-indent: 0; }
+
+    /* Prevent CJK-Latin inter-word spacing artifacts */
+    body { word-spacing: 0; }
 
     .author-info {
       display: table;
